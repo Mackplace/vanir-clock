@@ -1,7 +1,7 @@
 /**
  * Created by Mario Cifuentes on 17/10/2016.
  */
-console.log(monday);
+
 
 var clockGroupMonday, fields, formatHour, formatMinute, formatSecond, height, offSetX, offSetY, pi, renderMonday, scaleHours, scaleSecsMins, vis, width;
 
@@ -89,13 +89,13 @@ fields = function() {
 
 
 
-width = 400;
+width = 800;
 
-height = 200;
+height = 400;
 
-offSetX = 100;
+offSetX = 200;
 
-offSetY = 100;
+offSetY = 200;
 
 pi = Math.PI;
 
@@ -180,6 +180,18 @@ clockGroupMonday.append("svg:circle")
     .attr("stroke-width", 2);
 
 
+clockGroupMonday.append("svg:circle")
+    .attr("r", radius+0.5)
+    .attr("fill", "none")
+    .attr("class", "clock outercircle")
+    .attr("stroke", "black")
+    .attr("stroke-width", 2);
+
+
+
+
+
+
 
 clockGroupMonday.append('g')
     .attr('class', 'ticks')
@@ -210,7 +222,22 @@ clockGroupMonday.append('g')
         };
         return 'M' + coord.outer[0] + ' ' + coord.outer[1] + 'L' + coord.inner[0] + ' ' + coord.inner[1] + 'Z';
     })
-    .attr('stroke', 'gray');
+    .attr('stroke', 'black');
+	
+clockGroupMonday.selectAll('.minuteLabel')
+.data(d3.range(5,24,5))
+.enter()
+.append('text')
+.attr('class', 'second-label')
+			.attr('text-anchor','middle')
+			.attr('x',function(d){
+				return radius + offSetX;
+			})
+			.attr('y',function(d){
+				return radius + offSetY			})
+			.text(function(d){
+				return d;
+			});
 
 
 
@@ -219,6 +246,9 @@ clockGroupMonday.append("svg:circle")
     .attr("r", 4)
     .attr("fill", "black")
     .attr("class", "clock innercircle");
+
+
+
 
 var w = 500,
     h = 500;
@@ -232,6 +262,47 @@ var text = clockGroupMonday.append("text")
     .attr("font-family","Arial")
     .attr("fill", "Black")
     .text("Monday");
+
+var text = clockGroupMonday.append("text")
+    .attr("class", "title")
+    .attr('transform', 'translate(-300,-90)')
+    .attr("x", w - 204)
+    .attr("y", 5)
+    .attr("font-size", "15px")
+    .attr("font-family","Arial")
+    .attr("fill", "Black")
+    .text("0");
+
+var text1 = clockGroupMonday.append("text")
+    .attr("class", "title")
+    .attr('transform', 'translate(-300,-90)')
+    .attr("x", w-115 )
+    .attr("y", 95)
+    .attr("font-size", "15px")
+    .attr("font-family","Arial")
+    .attr("fill", "Black")
+    .text("6");
+
+var text2 = clockGroupMonday.append("text")
+    .attr("class", "title")
+    .attr('transform', 'translate(-300,-90)')
+    .attr("x", w-210 )
+    .attr("y", 185)
+    .attr("font-size", "15px")
+    .attr("font-family","Arial")
+    .attr("fill", "Black")
+    .text("12");
+
+var text2 = clockGroupMonday.append("text")
+    .attr("class", "title")
+    .attr('transform', 'translate(-300,-90)')
+    .attr("x", w-300 )
+    .attr("y", 95)
+    .attr("font-size", "15px")
+    .attr("font-family","Arial")
+    .attr("fill", "Black")
+    .text("18");
+
 
 var legend = clockGroupMonday.append('g')
         .attr("class", "legend")
@@ -282,6 +353,7 @@ for (i = 0; i < monday.length; i++) {
         .on('mouseover',function(d)
         {
             z='path.'+d3.select(this).attr("class");
+
             clockGroupMonday.selectAll('path')
                 .style("fill-opacity",.05)
                 .style("stroke-opacity", .6);
@@ -289,6 +361,8 @@ for (i = 0; i < monday.length; i++) {
             clockGroupMonday.selectAll(z)
                 .style("fill-opacity", .7)
                 .style("stroke-opacity", 1);
+
+
 
 
         }).on('mouseout', function(){

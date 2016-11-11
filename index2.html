@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<script src="ClockData.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="tipsy.js"></script>
+<link rel="stylesheet" type="text/css" href="tipsy.css">
+<script src="script2.js"></script>
+
+	  <input type="checkbox" class="chbx" name="chbx1" value="Monday" id="mondaychbx"> Monday
+	  <input type="checkbox" class="chbx" name="chbx2" value="Tuesday" id="tuesdaychbx"> Tuesday
+	  <input type="checkbox" class="chbx" name="chbx3" value="Wednesday" id="wednesdaychbx"> Wednesday
+	  <input type="checkbox" class="chbx" name="chbx4" value="Thursday" id="thursdaychbx"> Thursday
+	  <input type="checkbox" class="chbx" name="chbx5" value="Friday" id="fridaychbx"> Friday
+	  <input type="checkbox" class="chbx" name="chbx6" value="Saturday" id="saturda	ychbx"> Saturday
+	  <input type="checkbox" class="chbx" name="chbx7" value="Sunday" id="sundaychbx"> Sunday
+	  <input type="checkbox" class="chbx" name="chbx8" value="Week" id="weekchbx"> Week
+	  <input type="checkbox" class="chbx" name="chbx9" value="Weekend" id="weekendchbx"> Weekend
+	  
+	  <input type="button" class="bMaster" name="chbx10" value="All" id="allchbx"> 
+	 
+
+
+<style>
+
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+
+    .axis text {
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+
+    .loading {
+        font-family: sans-serif;
+        font-size: 15px;
+    }
+
+    rect {
+
+		stroke: black;
+		opacity: 0.8;
+    }
+
+	rect:hover
+	{
+		opacity: 0.5;
+
+	}
+
+	body
+	{
+
+		background-image: url("symphony.png");
+	}
+</style>
+
+
+
+<div id="punchcard"></div>
+<script src="http://d3js.org/d3.v2.min.js"></script>
+<script src="ClockData.js"></script>
+
+<div id="group1">
+    <div id="idMonday" class="monday"><script src="ScatterMonday.js"></script></div>
+    <div id="idTuesday" class="tuesday"><script src="ScatterTuesday.js"></script></div>
+    <div id="idWednesday"class="wednesday"><script src="ScatterWednesday.js"></script></div>
+    <div id="idThursday"class="thursday"><script src="ScatterThursday.js"></script></div>
+    <div id="idFriday"class="friday"><script src="ScatterFriday.js"></script></div>
+</div>
+
+<div id="group2">
+    <div id="idSaturday"class="saturday"><script src="ScatterSaturday.js"></script></div>
+    <div id="idSunday"class="sunday"><script src="ScatterSunday.js"></script></div>
+</div>
+
+<div id="group3">
+    <div id="idWeek"class="week"><script src="ScatterWeek.js"></script></div>
+    <div id="idWeekend"class="weekend"><script src="ScatterWeekend.js"></script></div>
+</div>
+
+
+

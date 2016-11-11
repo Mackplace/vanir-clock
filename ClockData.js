@@ -1,4 +1,5 @@
 
+
 var monday=[
     [
     {Activity:'eating',intervalo:"8:45-9:30"}
@@ -79,7 +80,7 @@ var wednesday=[
         ,{Activity:'eating',intervalo:"18:00-19:00"}
     ],[
         {Activity:'enterHome',intervalo:"13:15-15:45"}
-        ,{Activity:'enterHome',intervalo:"18:45-15:30"}
+        ,{Activity:'enterHome',intervalo:"18:45-20:00"}
     ], [
         {Activity:'meal_preparation',intervalo:"6:45-10:30"}
         ,{Activity:'meal_preparation',intervalo:"13:30-15:15"}

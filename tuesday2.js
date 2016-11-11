@@ -1,11 +1,3 @@
-/**
- * Created by Mario Cifuentes on 17/10/2016.
- */
-/**
- * Created by Mario Cifuentes on 17/10/2016.
- */
-console.log(monday);
-
 var clockGroupTuesday, fields, formatHour, formatMinute, formatSecond, height, offSetX, offSetY, pi, renderTuesday, scaleHours, scaleSecsMins, vis, width;
 
 var radius = 80;
@@ -13,6 +5,8 @@ var tickLength = 10;
 var fromClock = 0.25;
 var toClock = 1;
 var circleDegree = 360;
+var intervalo ="";
+var actividad ="";
 
 function degToRad(degrees) {
     return degrees * Math.PI / 180;
@@ -44,7 +38,7 @@ function splitDegrees(num) {
 
 function hourToDec(p)
 {
-    console.log(p);
+
     var h= p;
     var hora = p.split("-");
     var horaInicio = hora[0].split(":");
@@ -59,7 +53,7 @@ function hourToDec(p)
 }
 
 
-console.log( hourToDec("9:30-11:30"));
+
 
 formatSecond = d3.time.format("%S");
 
@@ -92,13 +86,13 @@ fields = function() {
 
 
 
-width = 400;
+width = 800;
 
-height = 200;
+height = 400;
 
-offSetX = 100;
+offSetX = 200;
 
-offSetY = 100;
+offSetY = 200;
 
 pi = Math.PI;
 
@@ -110,7 +104,7 @@ scaleHours = d3.scale.linear()
     .domain([0, 23 + 59 / 60])
     .range([0, 2 * pi]);
 
-vis = d3.selectAll(".monday")
+vis = d3.selectAll(".tuesday")
     .append("svg:svg")
     .attr("width", width)
     .attr("height", height);
@@ -125,32 +119,53 @@ var hourScale = d3.scale.linear()
 
 
 
+
 colors = ['green', 'blue', 'yellow', 'red', 'purple','#E53D00'];
 arcs = [[],[],[],[],[],[]];
 
-for (i = 0; i < monday.length; i++) {
-    console.log(monday[i][1].Activity);
-    for (j = 0; j < monday[i].length; j++) {
-        console.log(monday[i][j].intervalo);
+
+for (i = 0; i < tuesday.length; i++) {
+
+    clockGroupTuesday.append("svg:circle")
+        .attr("r", (radius+120)*(1-((i)*0.1)))
+        .attr("fill", "white")
+        .attr("class", "clock outercircle")
+        .attr("stroke", "black")
+        .attr("stroke-opacity", .3)
+        .attr("stroke-width", 2);
+    for (j = 0; j < tuesday[i].length; j++) {
+
+
+
+        console.log(tuesday[i][j].intervalo);
+
         var arc = d3.svg.arc()
             .innerRadius(0)
-            .outerRadius(radius)
-            .startAngle(clockToRad(hourToDec(monday[i][j].intervalo)[0], -1))
-            .endAngle(clockToRad(hourToDec(monday[i][j].intervalo)[1], 1));
+            .outerRadius((radius+120)*(1-(i*0.1)))
+            .startAngle(clockToRad(hourToDec(tuesday[i][j].intervalo)[0], -1))
+            .endAngle(clockToRad(hourToDec(tuesday[i][j].intervalo)[1], 1));
         arcs[i][j] = arc;
         clockGroupTuesday.append('path')
             .attr('d', arcs[i][j])
-            .attr("class", monday[i][j].Activity)
+            .attr("class", tuesday[i][j].Activity)
             .style('fill', colors[i])
             .style("stroke", colors[i])
+            .attr("intervalo",tuesday[i][j].intervalo)
             .style("fill-opacity", .8)
             .style("stroke-opacity", .9)
             .on('mouseover',function(d)
             {
+
+                actividad = d3.select(this)[0][0].getAttribute('class')
+                intervalo = d3.select(this)[0][0].getAttribute('intervalo');
+
+                $('.tooltip').css('left', 5).css('top', 25).css('display', 'block');
+
                 z='path.'+d3.select(this).attr("class");
                 clockGroupTuesday.selectAll('path')
                     .style("fill-opacity",.3)
                     .style("stroke-opacity", .3);
+
 
                 clockGroupTuesday.selectAll(z)
                     .style("fill-opacity", .9)
@@ -158,30 +173,20 @@ for (i = 0; i < monday.length; i++) {
 
 
             }).on('mouseout', function(){
-                clockGroupTuesday.selectAll('path')
-                    .style("fill-opacity", .8)
-                    .style("stroke-opacity", .9);})
+            clockGroupTuesday.selectAll('path')
+                .style("fill-opacity", .8)
+                .style("stroke-opacity", .9);})
             .append('svg:image');
     }
+
 }
-
-
-
-
 clockGroupTuesday.append("svg:circle")
-    .attr("r", radius)
-    .attr("fill", "none")
-    .attr("class", "clock outercircle")
-    .attr("stroke", "white")
-    .attr("stroke-width", 2);
-
-clockGroupTuesday.append("svg:circle")
-    .attr("r", radius+0.5)
-    .attr("fill", "none")
+    .attr("r", (radius+120)*(1-((tuesday.length)*0.1)))
+    .attr("fill", "white")
     .attr("class", "clock outercircle")
     .attr("stroke", "black")
+    .attr("stroke-opacity", .3)
     .attr("stroke-width", 2);
-
 
 
 clockGroupTuesday.append('g')
@@ -192,28 +197,45 @@ clockGroupTuesday.append('g')
     .append('path')
     .attr('d', function(d) {
         var coord = {
-            outer: getCoordFromCircle(d, 0, 0, radius),
+            outer: getCoordFromCircle(d, 0, 0, radius+120),
             inner: getCoordFromCircle(d, 0, 0, radius - tickLength)
         };
         return 'M' + coord.outer[0] + ' ' + coord.outer[1] + 'L' + coord.inner[0] + ' ' + coord.inner[1] + 'Z';
     })
     .attr('stroke', 'black')
+    .attr("stroke-opacity", .3);
 
 
-clockGroupTuesday.append('g')
-    .attr('class', 'ticks')
-    .selectAll('path')
-    .data(splitDegrees(12))
+clockGroupTuesday.selectAll('.minuteLabel')
+    .data(d3.range(5,24,5))
     .enter()
-    .append('path')
-    .attr('d', function(d) {
-        var coord = {
-            outer: getCoordFromCircle(d, 0, 0, radius-40),
-            inner: getCoordFromCircle(d, 0, 0, radius - 40 -tickLength)
-        };
-        return 'M' + coord.outer[0] + ' ' + coord.outer[1] + 'L' + coord.inner[0] + ' ' + coord.inner[1] + 'Z';
+    .append('text')
+    .attr('class', 'second-label')
+    .attr('text-anchor','middle')
+    .attr('x',function(d){
+        return radius + offSetX;
     })
-    .attr('stroke', 'gray');
+    .attr('y',function(d){
+        return radius + offSetY			})
+    .text(function(d){
+        return d;
+    });
+
+
+clockGroupTuesday.selectAll('.minuteLabel')
+    .data(d3.range(5,24,5))
+    .enter()
+    .append('text')
+    .attr('class', 'second-label')
+    .attr('text-anchor','middle')
+    .attr('x',function(d){
+        return radius + offSetX;
+    })
+    .attr('y',function(d){
+        return radius + offSetY			})
+    .text(function(d){
+        return d;
+    });
 
 
 
@@ -223,121 +245,6 @@ clockGroupTuesday.append("svg:circle")
     .attr("fill", "black")
     .attr("class", "clock innercircle");
 
-var w = 500,
-    h = 500;
-
-var text = clockGroupTuesday.append("text")
-    .attr("class", "title")
-    .attr('transform', 'translate(-300,-90)')
-    .attr("x", w - 70)
-    .attr("y", 10)
-    .attr("font-size", "20px")
-    .attr("font-family","Arial")
-    .attr("fill", "Black")
-    .text("Tuesday");
-
-
-var text = clockGroupTuesday.append("text")
-    .attr("class", "title")
-    .attr('transform', 'translate(-300,-90)')
-    .attr("x", w - 204)
-    .attr("y", 5)
-    .attr("font-size", "15px")
-    .attr("font-family","Arial")
-    .attr("fill", "Black")
-    .text("0");
-
-var text1 = clockGroupTuesday.append("text")
-    .attr("class", "title")
-    .attr('transform', 'translate(-300,-90)')
-    .attr("x", w-115 )
-    .attr("y", 95)
-    .attr("font-size", "15px")
-    .attr("font-family","Arial")
-    .attr("fill", "Black")
-    .text("6");
-
-var text2 = clockGroupTuesday.append("text")
-    .attr("class", "title")
-    .attr('transform', 'translate(-300,-90)')
-    .attr("x", w-210 )
-    .attr("y", 185)
-    .attr("font-size", "15px")
-    .attr("font-family","Arial")
-    .attr("fill", "Black")
-    .text("12");
-
-var text2 = clockGroupTuesday.append("text")
-    .attr("class", "title")
-    .attr('transform', 'translate(-300,-90)')
-    .attr("x", w-300 )
-    .attr("y", 95)
-    .attr("font-size", "15px")
-    .attr("font-family","Arial")
-    .attr("fill", "Black")
-    .text("18");
-
-var legend = clockGroupTuesday.append('g')
-        .attr("class", "legend")
-        .attr("height", 100)
-        .attr("width", 200)
-        .attr('transform', 'translate(-300,-70)')
-    ;
-
-for (i = 0; i < monday.length; i++) {
-    console.log(monday[i][1].Activity);
-    //Create colour squares
-    legend.append("rect")
-        .attr("class", monday[i][1].Activity)
-        .attr("x", w - 65)
-        .attr("y", i*20)
-        .attr("width", 10)
-        .attr("height", 10)
-        .style("fill", colors[i])
-        .on('mouseover',function(d)
-        {
-            z='path.'+d3.select(this).attr("class");
-            clockGroupTuesday.selectAll('path')
-                .style("fill-opacity",.05)
-                .style("stroke-opacity", .6);
-
-            clockGroupTuesday.selectAll(z)
-                .style("fill-opacity", .7)
-                .style("stroke-opacity", 1);
-
-
-        }).on('mouseout', function(){
-            clockGroupTuesday.selectAll('path')
-                .style("fill-opacity",.8)
-                .style("stroke-opacity", .9);});
-
-    //Create text next to squares
-    legend.append("text")
-        .attr("class", monday[i][1].Activity)
-        .attr("x", w - 52)
-        .attr("y", 10 + i*20)
-        .attr("font-size", "12px")
-        .attr("font-family","Arial")
-        .attr("fill", "black")
-        .text(monday[i][1].Activity)
-        .on('mouseover',function(d)
-        {
-            z='path.'+d3.select(this).attr("class");
-            clockGroupTuesday.selectAll('path')
-                .style("fill-opacity",.05)
-                .style("stroke-opacity", .6);
-
-            clockGroupTuesday.selectAll(z)
-                .style("fill-opacity", .7)
-                .style("stroke-opacity", 1);
-
-
-        }).on('mouseout', function(){
-            clockGroupTuesday.selectAll('path')
-                .style("fill-opacity",.8)
-                .style("stroke-opacity", .9);});
-
-}
 
 
 
@@ -405,5 +312,137 @@ setInterval(function() {
     return renderTuesday(data);
 }, 1000);
 
+var w = 500,
+    h = 500;
+
+var text = clockGroupTuesday.append("text")
+    .attr("class", "title")
+    .attr('transform', 'translate(-300,-90)')
+    .attr("x", w +100)
+    .attr("y", 0)
+    .attr("font-size", "20px")
+    .attr("font-family","Arial")
+    .attr("fill", "Black")
+    .text("Tuesday");
+
+var text0 = clockGroupTuesday.append("text")
+    .attr("class", "title")
+    .attr('transform', 'translate(-300,-90)')
+    .attr("x", w - 204)
+    .attr("y", 35)
+    .attr("font-size", "15px")
+    .attr("font-family","Arial")
+    .attr("fill", "Black")
+    .text("0");
+
+var text1 = clockGroupTuesday.append("text")
+    .attr("class", "title")
+    .attr('transform', 'translate(-300,-90)')
+    .attr("x", w-140 )
+    .attr("y", 95)
+    .attr("font-size", "15px")
+    .attr("font-family","Arial")
+    .attr("fill", "Black")
+    .text("6");
+
+var text2 = clockGroupTuesday.append("text")
+    .attr("class", "title")
+    .attr('transform', 'translate(-300,-90)')
+    .attr("x", w-210 )
+    .attr("y", 155)
+    .attr("font-size", "15px")
+    .attr("font-family","Arial")
+    .attr("fill", "Black")
+    .text("12");
+
+var text2 = clockGroupTuesday.append("text")
+    .attr("class", "title")
+    .attr('transform', 'translate(-300,-90)')
+    .attr("x", w-270 )
+    .attr("y", 95)
+    .attr("font-size", "15px")
+    .attr("font-family","Arial")
+    .attr("fill", "Black")
+    .text("18");
 
 
+var legend = clockGroupTuesday.append('g')
+    .attr("class", "legend")
+    .attr("height", 100)
+    .attr("width", 200)
+    .attr('transform', 'translate(-300,-70)');
+
+
+
+for (i = 0; i < tuesday.length; i++) {
+    console.log(tuesday[i][1].Activity);
+    //Create colour squares
+    legend.append("rect")
+        .attr("class", tuesday[i][1].Activity)
+        .attr("x", w +100)
+        .attr("y", i*20)
+        .attr("width", 10)
+        .attr("height", 10)
+        .style("fill", colors[i])
+        .on('mouseover',function(d)
+        {
+            z='path.'+d3.select(this).attr("class");
+            clockGroupTuesday.selectAll('path')
+                .style("fill-opacity",.05)
+                .style("stroke-opacity", 0.6);
+
+            clockGroupTuesday.selectAll(z)
+                .style("fill-opacity", .7)
+                .style("stroke-opacity", 1);
+
+
+
+
+        }).on('mouseout', function(){
+        clockGroupTuesday.selectAll('path')
+            .style("fill-opacity",.8)
+            .style("stroke-opacity", .9);});
+
+    //Create text next to squares
+    legend.append("text")
+        .attr("class", tuesday[i][1].Activity)
+        .attr("x", w +130)
+        .attr("y", 10 + i*20)
+        .attr("font-size", "12px")
+        .attr("font-family","Arial")
+        .attr("fill", "black")
+        .text(tuesday[i][1].Activity)
+        .on('mouseover',function(d)
+        {
+            z='path.'+d3.select(this).attr("class");
+
+            clockGroupTuesday.selectAll('path')
+                .style("fill-opacity",.05)
+                .style("stroke-opacity", .6);
+
+            clockGroupTuesday.selectAll(z)
+                .style("fill-opacity", .7)
+                .style("stroke-opacity", 1);
+
+
+
+
+        }).on('mouseout', function(){
+        clockGroupTuesday.selectAll('path')
+            .style("fill-opacity",.8)
+            .style("stroke-opacity", .9);});
+
+}
+$('svg g path').tipsy({
+    track: true,
+    delay: 0,
+    html: true,
+    title: function() {
+        return  actividad + " usually at " + intervalo;
+    }
+});
+
+
+/**
+ * Created by Mario Cifuentes on 10/11/2016.
+ */
