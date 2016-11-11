@@ -5,6 +5,8 @@ var w = 940,
     pad = 20,
     left_pad = 100,
     Data_url = '/data.json';
+var intervalo ="";
+var actividad ="";
 var c20 = d3.scale.category20();
 
 
@@ -131,33 +133,36 @@ for (i = 0; i < monday.length; i++) {
 
 
 
+
+
         svg.append("rect")
             .attr("x", hourPosition(inicialHour(monday[i][j].intervalo)[0]))
             .attr("y",altura)
             .attr("width",hourToAxis(inicialHour(monday[i][j].intervalo)[1]))
             .attr("height",20)
             .attr("fill",colores_g[i])
-            .attr('stroke', 'black');
-
-
-
-
-        $('rect').tipsy(
+            .attr('stroke', 'black')
+            .attr("intervalo",monday[i][j].intervalo)
+            .on('mouseover',function(d)
             {
 
+                actividad = d3.select(this)[0][0].getAttribute('class')
+                intervalo = d3.select(this)[0][0].getAttribute('intervalo');
 
-                gravity: 'w',
-                html:true,
-                title: function () {
+                $('.tooltip').css('left', 5).css('top', 25).css('display', 'block');
 
-                    var d = this.$element;
-                    console.log(d.intervalo.toString());
-                    return 'hola';
+                $('rect').tipsy({
+                    track: true,
+                    delay: 0,
+                    html: true,
+                    title: function() {
+                        return  " Usually done at " + intervalo;
+                    }
+                });
 
-                }
 
-            }
-        )
+
+            })
 
 
 
@@ -165,6 +170,8 @@ for (i = 0; i < monday.length; i++) {
     }
     altura=altura-41.5;
 }
+
+
 
 
 

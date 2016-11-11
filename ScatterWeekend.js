@@ -138,6 +138,27 @@ for (i = 0; i <weekeend.length; i++) {
             .attr("width",hourToAxis(inicialHour(weekeend[i][j].intervalo)[1]))
             .attr("height",20)
             .attr("fill",colores_g[i])
+            .attr("intervalo",weekeend[i][j].intervalo)
+            .on('mouseover',function(d)
+            {
+
+                actividad = d3.select(this)[0][0].getAttribute('class')
+                intervalo = d3.select(this)[0][0].getAttribute('intervalo');
+
+                $('.tooltip').css('left', 5).css('top', 25).css('display', 'block');
+
+                $('rect').tipsy({
+                    track: true,
+                    delay: 0,
+                    html: true,
+                    title: function() {
+                        return  " Usually done at " + intervalo;
+                    }
+                });
+
+
+
+            })
         ;
 
     }
